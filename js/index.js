@@ -10,12 +10,10 @@ const h1Element = document.querySelector("h1");
 //function declorations for changes
 const reset = function () {
     this.style = "";
-    console.log(event);
 }
 
 const displayNone = function (){
     this.style.display = "none";
-    console.log(event);
 }
 
 const colorLavender = function (event) {
@@ -24,18 +22,15 @@ const colorLavender = function (event) {
     this.style.backgroundColor = "black";
     this.style.color = "white";
     this.style.padding = "10px";
-    console.log(event);
 }
 
 const highlightYellow = function (event){
     this.style.backgroundColor = "yellow";
-    console.log(event);
 }
 const highlightOrange = function (event){
     event.stopPropagation();
     this.style.backgroundColor = "orange";
     this.style.padding = "30px";
-    console.log(event);
 }
 
 //event listeners for actions
@@ -49,3 +44,52 @@ headerElement.addEventListener("dblclick", highlightYellow);
 navElements.forEach ((nav) => {
     nav.addEventListener("dblclick", highlightOrange);
 })
+
+//grab middle section
+const middleImgs = document.querySelectorAll("div .img-content");
+const middleText = document.querySelectorAll("div .text-content");
+
+//create a new class for drag and drop sections
+middleImgs.forEach((img) => {
+    img.classList.add("dropzone");
+})
+middleText.forEach((p) => {
+    p.classList.add("dropzone");
+})
+
+//grab drag and drop classes
+const dragAndDrop = document.querySelectorAll("div .dropzone");
+
+//for each to add event listeners
+dragAndDrop.forEach((box) => {
+    box.addEventListener("dragstart", drag);
+    box.addEventListener("dragover", allowDrop);
+    box.addEventListener("dragleave", reset);
+    box.addEventListener("dragend", reset);
+    box.addEventListener("drop", drop);
+})
+
+console.log(dragAndDrop);
+
+function allowDrop (e) {
+    e.preventDefault();
+    this.style.backgroundColor = "yellow";
+}
+
+function drag(e) {
+    e.dataTransfer.setData("text", e.target.alt);
+    console.log("drag", e);
+}
+
+function drop(e) {
+    e.preventDefault();
+    let data = e.dataTransfer.getData("text");
+    this.style.backgroundColor = "";
+    if(data === "Let's go on an adventure!") {
+        this.parentNode.style.flexDirection = "row-reverse";
+    }
+    if (data === "Lets have fun!"){
+        this.parentNode.style.flexDirection = "row-reverse";
+        console.log(this);
+    }
+}
